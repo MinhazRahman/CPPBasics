@@ -2,7 +2,7 @@
 using namespace std;
 #ifndef RATIONAL_H
 #define RATIONAL_H
-/*
+/*Header file to declare Rational class and its members
 A rational number is a number that can be in the form p/q
 where p and q are integers and q is not equal to zero.
 */

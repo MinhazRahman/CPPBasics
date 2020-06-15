@@ -1,7 +1,8 @@
 #include <iostream>
 #include "rational.h"
 using namespace std;
-/*Compile, Link and Run multiple files:
+/*Client file
+Compile, Link and Run multiple files:
 1. compile the .cpp files into object files (.o files)first:
 $ clang++ -c rational.cpp rationalMain.cpp 
 

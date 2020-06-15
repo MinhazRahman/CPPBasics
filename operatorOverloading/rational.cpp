@@ -1,6 +1,9 @@
 #include <iostream>
 using namespace std;
 #include "rational.h"
+/*
+Implementations of the class and instance members
+*/
 
 Rational::Rational()
 {

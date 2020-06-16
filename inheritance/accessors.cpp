@@ -34,8 +34,8 @@ public:
   }
 };
 
-//derive a class B from class A, the protected and public members of class A
-//becomes public and protected members respectively of class B.
+//Derive a class B from class A, the protected and public members of class A
+//become public and protected members, respectively of class B.
 
 class B : public A
 {
@@ -49,7 +49,7 @@ public:
   }
 };
 
-//derive a class C from class A, that inherits the protected and public members of class A
+//Derive a class C from class A, that inherits the protected and public members of class A
 //as protected members of its own
 class C : protected A
 {
@@ -94,7 +94,7 @@ public:
 
 int main()
 {
-  //on an object we can access only public members
+  //On an object, we can only access public members
   A obj(10, 20, 30);
   cout << obj.c << endl;
 

@@ -16,15 +16,27 @@ private:
   int ranking;
 
 public:
-  Song(string name, int ranking)
-  {
-    this->name = name;
-    this->ranking = ranking;
-  }
+  Song();
+  Song(string, int);
+  ~Song();
   void useRawPointer();
   void useSmartPointer();
   int getRanking();
 };
+
+Song::Song() {}
+
+Song::Song(string name, int ranking)
+{
+  cout << "Inside the constructor" << endl;
+  this->name = name;
+  this->ranking = ranking;
+}
+
+Song::~Song()
+{
+  cout << "Inside the destructor" << endl;
+}
 
 int Song::getRanking()
 {
@@ -43,7 +55,7 @@ void Song::useRawPointer()
   delete pSong;
 }
 
-void useSmartPointer()
+void Song::useSmartPointer()
 {
   // Declare a smart pointer on stack and pass it the raw pointer.
   unique_ptr<Song> song2(new Song("Nothing on You", 2));
@@ -57,4 +69,12 @@ void useSmartPointer()
 
 int main()
 {
+  //create objects
+  Song song;
+
+  //call methods
+  song.useRawPointer();
+  song.useSmartPointer();
+
+  return 0;
 }

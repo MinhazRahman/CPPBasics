@@ -1,6 +1,6 @@
 #include "complex.h"
 
-//implementations
+// implementations
 Complex::Complex()
 {
   this->real = 0;
@@ -20,7 +20,7 @@ Complex Complex::add(Complex complex)
 
   return comp;
 }
-//addition (+) operator overloading
+// addition (+) operator overloading
 Complex Complex::operator+(Complex complex)
 {
   Complex comp;
@@ -30,6 +30,9 @@ Complex Complex::operator+(Complex complex)
   return comp;
 }
 // operator overloading using friend functions
+// friend functions don't belong to the class.
+// friend function has to be written outside of the class
+// without scope resolution operator
 Complex operator-(Complex x, Complex y)
 {
   Complex temp;
@@ -39,7 +42,7 @@ Complex operator-(Complex x, Complex y)
   return temp;
 }
 
-//overload stream insertion operator <<
+// overload stream insertion operator <<
 ostream &operator<<(ostream &output, Complex &c)
 {
   output << c.real << " + i" << c.img << endl;

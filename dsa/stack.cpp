@@ -36,19 +36,28 @@ Stack<T> &Stack<T>::operator=(const Stack<T> &s) // overloading = (assignment = 
     return *this;
 }
 
+/*
+ * + operator what it does is to concatenate two stacks
+ * s1 and s2
+ * example s1={1,3} and s2={4,6,7,8}, suppose that size s1=3, and size s2=7
+ * top of stack1 = 1 (top element = 3}, top of stack2 = 3 (top element = 8)
+ * totalSize= 10 (that is size of s1 + size of s2)
+ * temp={1,3,4,6,7,8}, where the top is 5 and the top element is 8
+ */
+
 template <class T>
 Stack<T> Stack<T>::operator+(const Stack<T> &s2) const // overloading + (concatenation + operator)
 {
-    int totsize = this->size + s2.size;
+    int totalSize = this->size + s2.size;
 
-    Stack<T> temp(totsize); // totsize = size of stack1 + size of stack2
-                            // do your work here
-                            // + operator what is does is to concatenate two stacks
-                            // s1 and s2
-                            // example s1={1,3} and s2={4,6,7,8}, suppose that size s1=3, and size s2=7
-                            // top of stack1 = 1 (top element = 3}, top of stack2 = 3 (top element = 8)
-                            // totsize= 10 (that is size of s1 + size of s2)
-                            // temp={1,3,4,6,7,8}, where the top is 5 and the top element is 8
+    Stack<T> temp(totalSize); // totalSize = size of stack1 + size of stack2
+    // do your work here
+    int i = 0;
+    while (temp.push(stackPtr[i++]) && i < size);
+
+    i = 0;
+    while (temp.push(s2.stackPtr[i++]) && i < s2.size);
+
     return temp;
 }
 

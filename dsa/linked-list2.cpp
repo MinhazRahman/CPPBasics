@@ -67,7 +67,7 @@ Chain<T>::~Chain()
     while (first)
     {
         nextp = first->next;
-        delete first;
+        // delete first;
         first = nextp;
     }
 }

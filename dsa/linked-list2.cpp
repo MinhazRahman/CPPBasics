@@ -49,7 +49,7 @@ public:
     int Search(const T &x) const;         // return position of x
     Chain<T> &Delete(int k, T &x);        // delete k element into x
     Chain<T> &Insert(int k, const T &x);  // insert x at  k element
-    Chain<T> &Extend(Chain<T> &ch2);      // attaches a Chain ch2 to the end of a Chain ch1
+    Chain<T> &Extend(Chain<T> &chainB);   // attaches a Chain B to the end of another Chain A
     void Output() const;
 
 private:
@@ -161,17 +161,20 @@ Chain<T> &Chain<T>::Insert(int k, const T &x)
 
 // Implement a function Extend that attaches a Chain B to the end of a Chain A
 template <class T>
-Chain<T> &Chain<T>::Extend(Chain<T> &ch2)
+Chain<T> &Chain<T>::Extend(Chain<T> &chainB)
 {
     Node<T> *current = first, *prior = first;
 
+    // iterate over the Chain A until Node prior points to the last node of Chain A
     while (current)
     {
         prior = current;
         current = current->next;
     }
 
-    prior->next = ch2.first;
+    // rewire the nodes
+    // the last node of Chain A points to the first node of the Chain B
+    prior->next = chainB.first;
 
     return *this;
 }

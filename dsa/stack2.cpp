@@ -51,21 +51,13 @@ Stack<T> Stack<T>::operator+(const Stack<T> &s2) const // overloading + (concate
     // totalSize = size of stack1 + size of stack2
     int totalSize = this->size + s2.size;
 
-    Stack<T> temp(totalSize);
+    Stack<T> temp(totalSize); 
     // do the concatenation
     int i = 0;
-    while (i < this->size) // push the first stack on temp
-    {
-        temp.push(this->stackPtr[i]);
-        i++;
-    }
+    while (temp.push(stackPtr[i++]) && i < size);
 
     i = 0;
-    while (i < s2.size) // push the second stack on temp
-    {
-        temp.push(s2.stackPtr[i]);
-        i++;
-    }
+    while (temp.push(s2.stackPtr[i++]) && i < s2.size);
 
     return temp;
 }

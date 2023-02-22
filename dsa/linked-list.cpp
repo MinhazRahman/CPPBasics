@@ -184,6 +184,7 @@ Chain<T> &Chain<T>::Extend(Chain<T> &chainB)
         this->first = chainB.first;
     }
 
+    // update the length of Chain A
     this->length = this->length + chainB.length;
 
     return *this;
@@ -211,18 +212,15 @@ int main()
                                      //  which in return throws a NoMem exception
     try
     {
-        Chain<int> L1, L2, L3, L4, L5;
+        Chain<int> L1, L2;
 
-        // L1.Insert(1, 2).Insert(2, 3).Insert(3, 4).Insert(4, 5);
+        L1.Insert(1, 2).Insert(2, 3).Insert(3, 4).Insert(4, 5);
         L1.Output();
         cout << "Length of L1: " << L1.Length() << endl;
 
-        // L2.Insert(1, 6).Insert(2, 7).Insert(3, 8).Insert(4, 9);
+        L2.Insert(1, 6).Insert(2, 7).Insert(3, 8).Insert(4, 9);
         L2.Output();
         cout << "Length of L2: " << L2.Length() << endl;
-
-        L3.Insert(1, 10).Insert(2, 11).Insert(3, 12).Insert(4, 13);
-        // L3.Output();
 
         L1.Extend(L2);
         L1.Output();

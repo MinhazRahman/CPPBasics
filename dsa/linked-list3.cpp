@@ -32,7 +32,6 @@ struct Node
     Node<T> *next;
 };
 
-// Chain class
 template <class T>
 class Chain
 {
@@ -49,7 +48,6 @@ public:
     int Search(const T &x) const;         // return position of x
     Chain<T> &Delete(int k, T &x);        // delete k element into x
     Chain<T> &Insert(int k, const T &x);  // insert x at  k element
-    Chain<T> &Extend(Chain<T> &chainB);   // attaches a Chain B to the end of another Chain A
     void Output() const;
 
 private:
@@ -67,7 +65,7 @@ Chain<T>::~Chain()
     while (first)
     {
         nextp = first->next;
-        // delete first;
+        delete first;
         first = nextp;
     }
 }
@@ -159,36 +157,6 @@ Chain<T> &Chain<T>::Insert(int k, const T &x)
     return *this;
 }
 
-// Implement a function Extend that attaches a Chain B to the end of a Chain A
-template <class T>
-Chain<T> &Chain<T>::Extend(Chain<T> &chainB)
-{
-    if (this->first != NULL)
-    {
-        Node<T> *current = first, *prior = first;
-
-        // iterate over the Chain A until Node prior points to the last node of Chain A
-        while (current)
-        {
-            prior = current;
-            current = current->next;
-        }
-
-        // rewire the nodes
-        // the last node of Chain A points to the first node of the Chain B
-        prior->next = chainB.first;
-    }
-    else // Chain A is empty
-    {
-        // first of Chain A points to the first of Chain B
-        this->first = chainB.first;
-    }
-
-    this->length = this->length + chainB.length;
-
-    return *this;
-}
-
 // outputs list
 template <class T>
 void Chain<T>::Output() const
@@ -211,22 +179,29 @@ int main()
                                      //  which in return throws a NoMem exception
     try
     {
-        Chain<int> L1, L2, L3, L4, L5;
+        Chain<int> L;
 
-        // L1.Insert(1, 2).Insert(2, 3).Insert(3, 4).Insert(4, 5);
-        L1.Output();
-        cout << "Length of L1: " << L1.Length() << endl;
+        cout << endl
+             << "Length= " << L.Length();
+        cout << endl
+             << "IsEmpty = " << L.IsEmpty();
 
-        // L2.Insert(1, 6).Insert(2, 7).Insert(3, 8).Insert(4, 9);
-        L2.Output();
-        cout << "Length of L2: " << L2.Length() << endl;
+        L.Insert(1, 2).Insert(2, 3).Insert(3, 4).Insert(4, 5);
+        L.Output();
 
-        L3.Insert(1, 10).Insert(2, 11).Insert(3, 12).Insert(4, 13);
-        // L3.Output();
+        cout << endl
+             << "IsEmpty = " << L.IsEmpty();
 
-        L1.Extend(L2);
-        L1.Output();
-        cout << "New Length of L1: " << L1.Length() << endl;
+        int z;
+        L.Find(1, z);
+
+        cout << endl
+             << "First element is: " << z;
+        cout << endl
+             << "The length of the list is: " << L.Length();
+
+        L.Delete(1, z);
+        L.Output();
     }
     catch (NoMem)
     {

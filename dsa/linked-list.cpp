@@ -44,13 +44,12 @@ public:
     } // constructor
     ~Chain();
     bool IsEmpty() const { return (first == 0); }
-    int Length() const { return length; }    //
-    bool Find(int k, T &x) const;            // return kth element into x
-    int Search(const T &x) const;            // return position of x
-    Chain<T> &Delete(int k, T &x);           // delete k element into x
-    Chain<T> &Insert(int k, const T &x);     // insert x at  k element
-    Chain<T> &Extend(Chain<T> &chainB);      // attaches a Chain B to the end of another Chain A
-    Chain<T> &ExtendChain(Chain<T> &chainB); // attaches a Chain B to the end of another Chain A
+    int Length() const { return length; } //
+    bool Find(int k, T &x) const;         // return kth element into x
+    int Search(const T &x) const;         // return position of x
+    Chain<T> &Delete(int k, T &x);        // delete k element into x
+    Chain<T> &Insert(int k, const T &x);  // insert x at  k element
+    Chain<T> &Extend(Chain<T> &chainB);   // attaches a Chain B to the end of another Chain A
     void Output() const;
 
 private:
@@ -164,37 +163,6 @@ Chain<T> &Chain<T>::Insert(int k, const T &x)
 template <class T>
 Chain<T> &Chain<T>::Extend(Chain<T> &chainB)
 {
-    if (this->first != NULL)
-    {
-        Node<T> *current = first, *prior = first;
-
-        // iterate over the Chain A until Node prior points to the last node of Chain A
-        while (current)
-        {
-            prior = current;
-            current = current->next;
-        }
-
-        // rewire the nodes
-        // the last node of Chain A points to the first node of the Chain B
-        prior->next = chainB.first;
-    }
-    else // Chain A is empty
-    {
-        // first of Chain A points to the first of Chain B
-        this->first = chainB.first;
-    }
-
-    // update the length of Chain A
-    this->length = this->length + chainB.length;
-
-    return *this;
-}
-
-// Implement a function Extend that attaches a Chain B to the end of a Chain A
-template <class T>
-Chain<T> &Chain<T>::ExtendChain(Chain<T> &chainB)
-{
     if (chainB.first != NULL)
     {
         Node<T> *current = chainB.first;
@@ -234,7 +202,7 @@ int main()
     {
         Chain<int> L1, L2;
 
-        L1.Insert(1, 2).Insert(2, 3).Insert(3, 4).Insert(4, 5);
+        // L1.Insert(1, 2).Insert(2, 3).Insert(3, 4).Insert(4, 5);
         L1.Output();
         cout << "Length of L1: " << L1.Length() << endl;
 
@@ -242,7 +210,7 @@ int main()
         L2.Output();
         cout << "Length of L2: " << L2.Length() << endl;
 
-        L1.ExtendChain(L2);
+        L1.Extend(L2);
         L1.Output();
         cout << "New Length of L1: " << L1.Length() << endl;
 

@@ -44,12 +44,13 @@ public:
     } // constructor
     ~Chain();
     bool IsEmpty() const { return (first == 0); }
-    int Length() const { return length; } //
-    bool Find(int k, T &x) const;         // return kth element into x
-    int Search(const T &x) const;         // return position of x
-    Chain<T> &Delete(int k, T &x);        // delete k element into x
-    Chain<T> &Insert(int k, const T &x);  // insert x at  k element
-    Chain<T> &Extend(Chain<T> &chainB);   // attaches a Chain B to the end of another Chain A
+    int Length() const { return length; }    //
+    bool Find(int k, T &x) const;            // return kth element into x
+    int Search(const T &x) const;            // return position of x
+    Chain<T> &Delete(int k, T &x);           // delete k element into x
+    Chain<T> &Insert(int k, const T &x);     // insert x at  k element
+    Chain<T> &Extend(Chain<T> &chainB);      // attaches a Chain B to the end of another Chain A
+    Chain<T> &ExtendChain(Chain<T> &chainB); // attaches a Chain B to the end of another Chain A
     void Output() const;
 
 private:
@@ -190,6 +191,25 @@ Chain<T> &Chain<T>::Extend(Chain<T> &chainB)
     return *this;
 }
 
+// Implement a function Extend that attaches a Chain B to the end of a Chain A
+template <class T>
+Chain<T> &Chain<T>::ExtendChain(Chain<T> &chainB)
+{
+    if (chainB.first != NULL)
+    {
+        Node<T> *current = chainB.first;
+
+        // iterate over the Chain B
+        while (current)
+        {
+            this->Insert(this->length + 1, current->data);
+            current = current->next;
+        }
+    }
+
+    return *this;
+}
+
 // outputs list
 template <class T>
 void Chain<T>::Output() const
@@ -218,13 +238,16 @@ int main()
         L1.Output();
         cout << "Length of L1: " << L1.Length() << endl;
 
-        L2.Insert(1, 6).Insert(2, 7).Insert(3, 8).Insert(4, 9);
+        // L2.Insert(1, 6).Insert(2, 7).Insert(3, 8).Insert(4, 9);
         L2.Output();
         cout << "Length of L2: " << L2.Length() << endl;
 
-        L1.Extend(L2);
+        L1.ExtendChain(L2);
         L1.Output();
         cout << "New Length of L1: " << L1.Length() << endl;
+
+        L2.Output();
+        cout << "Length of L2: " << L2.Length() << endl;
     }
     catch (NoMem)
     {

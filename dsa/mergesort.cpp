@@ -1,41 +1,47 @@
-
+//
+// Created by kanan on 3/25/23.
+//
 
 #include <iostream>
 #include <vector>
 using namespace std;
-
 // exception is thrown if wrong input
+class TypeE
+{
+public:
+    long key;
+    long value;
+
+    TypeE(){};
+
+    long Key() { return key; }
+
+    long Value() { return value; }
+};
+
 class BadInput
 {
 public:
     BadInput(){};
 };
-
 template <class E, class K>
 struct Node
 {
     E data;
     Node<E, K> *next;
 };
-
 template <class E, class K>
 class SortedChain
 {
 public:
     SortedChain() { first = 0; }
-
     ~SortedChain();
-
     bool IsEmpty() { return (first == 0); }
-
     // int Length() const;
     // bool Search (const K& k, const E& e);
     SortedChain<E, K> &Delete(const K &k, E &e);
-
     SortedChain<E, K> &Insert(const K &k, const E &e);
-
-    SortedChain<E, K> &Merge(const SortedChain<E, K> &S2);
-
+    SortedChain<E, K> &Merge(const SortedChain<E, K> &node);
     void Output() const;
 
 private:
@@ -53,7 +59,6 @@ SortedChain<E, K>::~SortedChain()
         first = current;
     }
 }
-
 template <class E, class K>
 SortedChain<E, K> &SortedChain<E, K>::Delete(const K &k, E &e)
 {
@@ -77,47 +82,45 @@ SortedChain<E, K> &SortedChain<E, K>::Delete(const K &k, E &e)
         throw BadInput();
 }
 
-// Merge function Implementation : Ibrahim Avci
 template <class E, class K>
-SortedChain<E, K> &SortedChain<E, K>::Merge(const SortedChain<E, K> &S2)
+SortedChain<E, K> &SortedChain<E, K>::Merge(const SortedChain<E, K> &node)
 {
-    SortedChain<E, K> *result = new SortedChain<E, K>();
+    SortedChain<E, K> *newNode = new SortedChain<E, K>();
 
-    Node<E, K> *current1 = this->first;
-    Node<E, K> *current2 = S2.first;
+    Node<E, K> *pointer1 = this->first;
+    Node<E, K> *pointer2 = node.first;
 
-    while (current1 != nullptr && current2 != nullptr)
+    while (pointer1 != nullptr && pointer2 != nullptr)
     {
-        if ((current1->data).Key() <= (current2->data).Key())
+        if (pointer1->data.Key() <= pointer2->data.Key())
         {
-            result->Insert(current1->data.Key(), current1->data);
-            current1 = current1->next;
+            newNode->Insert(pointer1->data.Key(), pointer1->data);
+            pointer1 = pointer1->next;
         }
         else
         {
-            result->Insert(current2->data.Key(), current2->data);
-            current2 = current2->next;
+            newNode->Insert(pointer2->data.Key(), pointer2->data);
+            pointer2 = pointer2->next;
         }
     }
 
-    while (current1 != nullptr)
+    while (pointer1 != nullptr)
     {
-        result->Insert(current1->data.Key(), current1->data);
-        current1 = current1->next;
+        newNode->Insert(pointer1->data.Key(), pointer1->data);
+        pointer1 = pointer1->next;
     }
 
-    while (current2 != nullptr)
+    while (pointer2 != nullptr)
     {
-        result->Insert(current2->data.Key(), current2->data);
-        current2 = current2->next;
+        newNode->Insert(pointer2->data.Key(), pointer2->data);
+        pointer2 = pointer2->next;
     }
 
-    this->first = result->first;
-    delete current1;
-    delete current2;
+    this->first = newNode->first;
+    delete pointer1;
+    delete pointer2;
     return *this;
 }
-//============ Ibrahim Avci =====================================
 
 template <class E, class K>
 SortedChain<E, K> &SortedChain<E, K>::Insert(const K &k, const E &e)
@@ -145,7 +148,6 @@ SortedChain<E, K> &SortedChain<E, K>::Insert(const K &k, const E &e)
         return *this;
     }
 }
-
 template <class E, class K>
 void SortedChain<E, K>::Output() const
 {
@@ -153,38 +155,25 @@ void SortedChain<E, K>::Output() const
     cout << endl;
     while (current)
     {
-        cout << "(" << current->data.Key() << ", " << current->data.Value() << ") "
-             << " -> ";
+        cout << "Key: " << current->data.Key() << ", Value: " << current->data.Value() << " -> ";
         current = current->next;
     }
 }
-
-class TypeE
-{
-public:
-    long key;
-    long value;
-
-    TypeE(){};
-
-    long Key() { return key; }
-
-    long Value() { return value; }
-};
 
 int main()
 {
     try
     {
+
         SortedChain<TypeE, long> Chain1, Chain2;
 
         // intializing the chain1
         TypeE e;
         e.key = 5;
-        e.value = 1000;
+        e.value = 500;
         Chain1.Insert(e.Key(), e);
         e.key = 8;
-        e.value = 500;
+        e.value = 1000;
         Chain1.Insert(e.Key(), e);
         e.key = 9;
         e.value = 1500;
@@ -192,10 +181,10 @@ int main()
 
         // initializing the chain2
         e.key = 5;
-        e.value = 3000;
+        e.value = 600;
         Chain2.Insert(e.Key(), e);
         e.key = 10;
-        e.value = 3000;
+        e.value = 2300;
         Chain2.Insert(e.Key(), e);
 
         // data in chain1 before calling merge function

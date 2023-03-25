@@ -1,7 +1,4 @@
-
-
 #include <iostream>
-#include <vector>
 using namespace std;
 
 // exception is thrown if wrong input
@@ -10,32 +7,24 @@ class BadInput
 public:
     BadInput(){};
 };
-
 template <class E, class K>
 struct Node
 {
     E data;
     Node<E, K> *next;
 };
-
 template <class E, class K>
 class SortedChain
 {
 public:
     SortedChain() { first = 0; }
-
     ~SortedChain();
-
     bool IsEmpty() { return (first == 0); }
-
     // int Length() const;
     // bool Search (const K& k, const E& e);
     SortedChain<E, K> &Delete(const K &k, E &e);
-
     SortedChain<E, K> &Insert(const K &k, const E &e);
-
-    SortedChain<E, K> &Merge(const SortedChain<E, K> &S2);
-
+    SortedChain<E, K> &Merge(const SortedChain<E, K> &chain);
     void Output() const;
 
 private:
@@ -53,7 +42,6 @@ SortedChain<E, K>::~SortedChain()
         first = current;
     }
 }
-
 template <class E, class K>
 SortedChain<E, K> &SortedChain<E, K>::Delete(const K &k, E &e)
 {
@@ -76,48 +64,6 @@ SortedChain<E, K> &SortedChain<E, K>::Delete(const K &k, E &e)
     else
         throw BadInput();
 }
-
-// Merge function Implementation : Ibrahim Avci
-template <class E, class K>
-SortedChain<E, K> &SortedChain<E, K>::Merge(const SortedChain<E, K> &S2)
-{
-    SortedChain<E, K> *result = new SortedChain<E, K>();
-
-    Node<E, K> *current1 = this->first;
-    Node<E, K> *current2 = S2.first;
-
-    while (current1 != nullptr && current2 != nullptr)
-    {
-        if ((current1->data).Key() <= (current2->data).Key())
-        {
-            result->Insert(current1->data.Key(), current1->data);
-            current1 = current1->next;
-        }
-        else
-        {
-            result->Insert(current2->data.Key(), current2->data);
-            current2 = current2->next;
-        }
-    }
-
-    while (current1 != nullptr)
-    {
-        result->Insert(current1->data.Key(), current1->data);
-        current1 = current1->next;
-    }
-
-    while (current2 != nullptr)
-    {
-        result->Insert(current2->data.Key(), current2->data);
-        current2 = current2->next;
-    }
-
-    this->first = result->first;
-    delete current1;
-    delete current2;
-    return *this;
-}
-//============ Ibrahim Avci =====================================
 
 template <class E, class K>
 SortedChain<E, K> &SortedChain<E, K>::Insert(const K &k, const E &e)
@@ -146,6 +92,20 @@ SortedChain<E, K> &SortedChain<E, K>::Insert(const K &k, const E &e)
     }
 }
 
+// Merge function merges chain2 into chain1 and
+// returns chain1
+template <class E, class K>
+SortedChain<E, K> &SortedChain<E, K>::Merge(const SortedChain<E, K> &S2)
+{
+    Node<E, K> *current = S2.first;
+    while (current)
+    {
+        this->Insert(current->data.Key(), current->data);
+        current = current->next;
+    }
+    return *this;
+}
+
 template <class E, class K>
 void SortedChain<E, K>::Output() const
 {
@@ -153,10 +113,10 @@ void SortedChain<E, K>::Output() const
     cout << endl;
     while (current)
     {
-        cout << "(" << current->data.Key() << ", " << current->data.Value() << ") "
-             << " -> ";
+        cout << current->data.Key() << ":" << current->data.Value() << " ->";
         current = current->next;
     }
+    cout << endl;
 }
 
 class TypeE
@@ -164,11 +124,8 @@ class TypeE
 public:
     long key;
     long value;
-
     TypeE(){};
-
     long Key() { return key; }
-
     long Value() { return value; }
 };
 
@@ -176,49 +133,51 @@ int main()
 {
     try
     {
-        SortedChain<TypeE, long> Chain1, Chain2;
 
-        // intializing the chain1
+        SortedChain<TypeE, long> Chain1;
+        SortedChain<TypeE, long> Chain2;
         TypeE e;
+
+        // Insert keys and values into chain1
         e.key = 5;
         e.value = 1000;
         Chain1.Insert(e.Key(), e);
+
         e.key = 8;
         e.value = 500;
         Chain1.Insert(e.Key(), e);
+
         e.key = 9;
         e.value = 1500;
         Chain1.Insert(e.Key(), e);
 
-        // initializing the chain2
+        // Insert keys and values into chain1
         e.key = 5;
-        e.value = 3000;
+        e.value = 4000;
         Chain2.Insert(e.Key(), e);
+
         e.key = 10;
         e.value = 3000;
         Chain2.Insert(e.Key(), e);
 
-        // data in chain1 before calling merge function
-        cout << "Chain 1 is :";
+        // print the chains
+        cout << "Chain1:" << endl;
         Chain1.Output();
-        // data in chain2 before calling merge function
-        cout << "\nChain 2 is :";
+        cout << "Chain2:" << endl;
         Chain2.Output();
-        // now call the merge function
+
+        // Merge chain2 with chain1
         Chain1.Merge(Chain2);
-        cout << "\nAfter the merge function";
-        // data in chain1 after calling merge function
-        // you can run the program and see that it is been merged correctly
-        cout << "\nChain 1 is :";
+
+        // print Chain1 after merging
+        cout << "After merging Chain1 becomes:" << endl;
         Chain1.Output();
-        // data in chain2 after calling merge function
-        // you can run the program and see that it remains unchanged
-        cout << "\nChain 2 is :";
-        Chain2.Output();
     }
     catch (BadInput)
     {
         cerr << endl
-             << "Bad Input";
+             << "Bad Input" << endl;
     }
+
+    return 0;
 }

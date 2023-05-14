@@ -146,9 +146,12 @@ struct Node *buildHuffmanTree(char letters[], int frequencies[], int size)
 
     while (!checkSizeOne(minHeap))
     {
+        // get two nodes with smallest frequencies from the min heap
         left = deleteSmallest(minHeap);
         right = deleteSmallest(minHeap);
 
+        // create a new node whose frequency is equal to the sum of the frequencies
+        // of the two smallest nodes.
         // '$' is a special value for internal nodes, not used
         top = createNode('$', left->frequency + right->frequency);
 
@@ -160,7 +163,7 @@ struct Node *buildHuffmanTree(char letters[], int frequencies[], int size)
     return deleteSmallest(minHeap);
 }
 
-// print the elements of the  given array
+// print the elements of the  given array that contains the code for each letter
 void displayCode(int arr[], int n)
 {
     for (int i = 0; i < n; ++i)
@@ -174,14 +177,14 @@ void displayCode(int arr[], int n)
 // prints the Huffman codes for each character in the Huffman tree
 void traverseHuffmanTree(struct Node *root, int arr[], int top)
 {
-    // assign 0 to left edge and traverse
+    // assign 0 to the left edge
     if (root->leftChild)
     {
         arr[top] = 0;
         traverseHuffmanTree(root->leftChild, arr, top + 1);
     }
 
-    // assign 1 to right edge and traverse
+    // assign 1 to the right edge
     if (root->rightChild)
     {
         arr[top] = 1;

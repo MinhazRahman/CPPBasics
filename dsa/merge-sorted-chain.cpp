@@ -152,25 +152,25 @@ int main()
         Chain1.Insert(e.Key(), e);
 
         // Insert keys and values into chain1
-        e.key = 5;
+        e.key = 6;
         e.value = 4000;
         Chain2.Insert(e.Key(), e);
 
-        e.key = 10;
+        e.key = 7;
         e.value = 3000;
         Chain2.Insert(e.Key(), e);
 
         // print the chains
-        cout << "Chain1:" << endl;
+        cout << "Chain1:";
         Chain1.Output();
-        cout << "Chain2:" << endl;
+        cout << "Chain2:";
         Chain2.Output();
 
         // Merge chain2 with chain1
         Chain1.Merge(Chain2);
 
         // print Chain1 after merging
-        cout << "After merging Chain1 becomes:" << endl;
+        cout << "After merging Chain1 becomes:";
         Chain1.Output();
     }
     catch (BadInput)

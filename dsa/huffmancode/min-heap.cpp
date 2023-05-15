@@ -41,6 +41,7 @@ public:
     ~MinHeap() { delete[] heap; }
     MinHeap<T> &Insert(T &x);
     MinHeap<T> &Delete(T &x);
+    void Output() const;
     int Size;
 
 private:
@@ -90,6 +91,17 @@ MinHeap<T> &MinHeap<T>::Delete(T &x)
     return *this;
 }
 
+// outputs list
+template <class T>
+void MinHeap<T>::Output() const
+{
+    for (int i = 1; i <= this->Size; i++)
+    {
+        cout << this->heap[i] << " ";
+    }
+    cout << endl;
+}
+
 int main()
 {
 
@@ -97,9 +109,17 @@ int main()
                                      //  which in return throws a NoMem exception
     try
     {
-        MinHeap<int> heap(10);
+        MinHeap<int> myHeap(10);
+        Node<int> *node = new Node<int>;
+        node->name = 'a';
+        int arr[] = {30, 20, 15, 5, 10, 12, 6, 40};
+        int size = sizeof(arr) / sizeof(arr[0]);
+        for (int i = 0; i < size; i++)
+        {
+            myHeap.Insert(arr[i]);
+        }
 
-        
+        myHeap.Output();
     }
     catch (NoMem)
     {

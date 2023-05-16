@@ -1,79 +1,56 @@
+
 #include <iostream>
 using namespace std;
 
-template <class T>
-class HuffmanCoding
+// define the structure of each node on the Huffman tree
+struct Node
 {
-private:
-    // define the structure of each node on the Huffman tree
-    struct Node
-    {
-        T name;
-        int frequency;
-        Node *leftChild;
-        Node *rightChild;
+    char name;
+    int frequency;
+    struct Node *leftChild;
+    struct Node *rightChild;
+};
 
-        Node(T name, int frequency)
-        {
-            this->name = name;
-            this->frequency = frequency;
-            leftChild = rightChild = nullptr;
-        }
-    };
-
-    // define the array of min heap nodes
-    struct MinHeap
-    {
-        int size;
-        int capacity;
-        Node **array;
-
-        MinHeap(int capacity)
-        {
-            size = 0;
-            this->capacity = capacity;
-            array = new Node *[capacity];
-        }
-    };
-
-    Node *createNode(T name, int frequency);
-    void swap(Node **a, Node **b);
-    void minHeapify(MinHeap *minHeap, int index);
-    bool checkSizeOne(MinHeap *minHeap);
-    Node *deleteSmallestFromHeap(MinHeap *minHeap);
-    void insertIntoHeap(MinHeap *minHeap, Node *node);
-    void buildMinHeap(MinHeap *minHeap);
-    bool isLeaf(Node *root);
-    MinHeap *createAndBuildMinHeap(T letters[], int frequencies[], int size);
-    Node *buildHuffmanTree(T letters[], int frequencies[], int size);
-    void displayLetterCode(int arr[], int n);
-    void traverseHuffmanTree(Node *root, int arr[], int top);
-    int treeHeight(Node *node);
-
-public:
-    void determineHuffmanCode(T letters[], int frequencies[], int size);
+// define the array of min heap nodes
+struct MinHeap
+{
+    int size;
+    int capacity;
+    struct Node **array;
 };
 
 // create min heap node with given name and frequency of the letter
-template <class T>
-typename HuffmanCoding<T>::Node *HuffmanCoding<T>::createNode(T name, int frequency)
+struct Node *createNode(char name, int frequency)
 {
-    Node *node = new Node(name, frequency);
+    struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+
+    node->leftChild = node->rightChild = NULL;
+    node->name = name;
+    node->frequency = frequency;
+
     return node;
 }
 
-// swap two minimum heap nodes
-template <class T>
-void HuffmanCoding<T>::swap(Node **a, Node **b)
+// Create min heap using given capacity
+struct MinHeap *createMinHeap(int capacity)
 {
-    Node *temp = *a;
+    struct MinHeap *minHeap = (struct MinHeap *)malloc(sizeof(struct MinHeap));
+    minHeap->size = 0;
+    minHeap->capacity = capacity;
+    minHeap->array = (struct Node **)malloc(minHeap->capacity * sizeof(struct Node *));
+    return minHeap;
+}
+
+// swap two minimum heap nodes
+void swap(struct Node **a, struct Node **b)
+{
+    struct Node *temp = *a;
     *a = *b;
     *b = temp;
 }
 
 // performs heapify operation on the min-heap
-template <class T>
-void HuffmanCoding<T>::minHeapify(MinHeap *minHeap, int index)
+void minHeapify(struct MinHeap *minHeap, int index)
 {
     int smallest = index;
     int left = 2 * index + 1;
@@ -87,23 +64,22 @@ void HuffmanCoding<T>::minHeapify(MinHeap *minHeap, int index)
 
     if (smallest != index)
     {
-        swap(&minHeap->array[smallest], &minHeap->array[index]);
+        swap(&minHeap->array[smallest],
+             &minHeap->array[index]);
         minHeapify(minHeap, smallest);
     }
 }
 
 // checks if the min-heap has only one node
-template <class T>
-bool HuffmanCoding<T>::checkSizeOne(MinHeap *minHeap)
+int checkSizeOne(struct MinHeap *minHeap)
 {
     return (minHeap->size == 1);
 }
 
 // delete the smallest node from the MinHeap
-template <class T>
-typename HuffmanCoding<T>::Node *HuffmanCoding<T>::deleteSmallestFromHeap(MinHeap *minHeap)
+struct Node *deleteSmallest(struct MinHeap *minHeap)
 {
-    Node *temp = minHeap->array[0];
+    struct Node *temp = minHeap->array[0];
     minHeap->array[0] = minHeap->array[minHeap->size - 1];
 
     --minHeap->size;
@@ -113,8 +89,7 @@ typename HuffmanCoding<T>::Node *HuffmanCoding<T>::deleteSmallestFromHeap(MinHea
 }
 
 // insert a node into the MinHeap
-template <class T>
-void HuffmanCoding<T>::insertIntoHeap(MinHeap *minHeap, Node *node)
+void insert(struct MinHeap *minHeap, struct Node *node)
 {
     ++minHeap->size;
     int i = minHeap->size - 1;
@@ -129,8 +104,7 @@ void HuffmanCoding<T>::insertIntoHeap(MinHeap *minHeap, Node *node)
 }
 
 // build the min heap
-template <class T>
-void HuffmanCoding<T>::buildMinHeap(MinHeap *minHeap)
+void buildMinHeap(struct MinHeap *minHeap)
 {
     int n = minHeap->size - 1;
     int i;
@@ -140,18 +114,16 @@ void HuffmanCoding<T>::buildMinHeap(MinHeap *minHeap)
 }
 
 // checks if the given node is a leaf node
-template <class T>
-bool HuffmanCoding<T>::isLeaf(Node *root)
+int isLeaf(struct Node *root)
 {
     return !(root->leftChild) && !(root->rightChild);
 }
 
 // creates and builds a new min-heap from the given arrays of letters and their frequencies
-template <class T>
-typename HuffmanCoding<T>::MinHeap *HuffmanCoding<T>::createAndBuildMinHeap(T letters[], int frequencies[], int size)
+struct MinHeap *createAndBuildMinHeap(char letters[], int frequencies[], int size)
 {
     // Create min heap using given capacity
-    MinHeap *minHeap = new MinHeap(size);
+    struct MinHeap *minHeap = createMinHeap(size);
 
     // for each letter create a node
     for (int i = 0; i < size; ++i)
@@ -167,33 +139,32 @@ typename HuffmanCoding<T>::MinHeap *HuffmanCoding<T>::createAndBuildMinHeap(T le
 }
 
 // builds the Huffman tree from the given arrays of letters and their frequencies
-template <class T>
-typename HuffmanCoding<T>::Node *HuffmanCoding<T>::buildHuffmanTree(T letters[], int frequencies[], int size)
+struct Node *buildHuffmanTree(char letters[], int frequencies[], int size)
 {
-    Node *left, *right, *top;
-    MinHeap *minHeap = createAndBuildMinHeap(letters, frequencies, size);
+    struct Node *left, *right, *top;
+    struct MinHeap *minHeap = createAndBuildMinHeap(letters, frequencies, size);
 
     while (!checkSizeOne(minHeap))
     {
         // get two nodes with smallest frequencies from the min heap
-        left = deleteSmallestFromHeap(minHeap);
-        right = deleteSmallestFromHeap(minHeap);
+        left = deleteSmallest(minHeap);
+        right = deleteSmallest(minHeap);
 
         // create a new node whose frequency is equal to the sum of the frequencies
         // of the two smallest nodes.
-        top = createNode(T(), left->frequency + right->frequency);
+        // '$' is a special value for internal nodes, not used
+        top = createNode('$', left->frequency + right->frequency);
+
         top->leftChild = left;
         top->rightChild = right;
 
-        insertIntoHeap(minHeap, top);
+        insert(minHeap, top);
     }
-
-    return deleteSmallestFromHeap(minHeap);
+    return deleteSmallest(minHeap);
 }
 
 // print the elements of the  given array that contains the code for each letter
-template <class T>
-void HuffmanCoding<T>::displayLetterCode(int arr[], int n)
+void displayCode(int arr[], int n)
 {
     for (int i = 0; i < n; ++i)
     {
@@ -204,8 +175,7 @@ void HuffmanCoding<T>::displayLetterCode(int arr[], int n)
 }
 
 // prints the Huffman codes for each character in the Huffman tree
-template <class T>
-void HuffmanCoding<T>::traverseHuffmanTree(Node *root, int arr[], int top)
+void traverseHuffmanTree(struct Node *root, int arr[], int top)
 {
     // assign 0 to the left edge
     if (root->leftChild)
@@ -220,19 +190,17 @@ void HuffmanCoding<T>::traverseHuffmanTree(Node *root, int arr[], int top)
         arr[top] = 1;
         traverseHuffmanTree(root->rightChild, arr, top + 1);
     }
-
     if (isLeaf(root))
     {
         cout << root->name << "  | ";
-        displayLetterCode(arr, top);
+        displayCode(arr, top);
     }
 }
 
 // calculate the height of a binary tree
-template <class T>
-int HuffmanCoding<T>::treeHeight(Node *node)
+int treeHeight(Node *node)
 {
-    if (node == nullptr)
+    if (node == NULL)
         return 0;
     else
     {
@@ -240,6 +208,7 @@ int HuffmanCoding<T>::treeHeight(Node *node)
         int leftHeight = treeHeight(node->leftChild);
         int rightHeight = treeHeight(node->rightChild);
 
+        // use the larger one
         if (leftHeight > rightHeight)
             return (leftHeight + 1);
         else
@@ -248,15 +217,15 @@ int HuffmanCoding<T>::treeHeight(Node *node)
 }
 
 // build the Huffman tree and print the code of each letter
-template <class T>
-void HuffmanCoding<T>::determineHuffmanCode(T letters[], int frequencies[], int size)
+void displayHuffmanCodes(char letters[], int frequencies[], int size)
 {
     // build the huffman tree
-    Node *root = buildHuffmanTree(letters, frequencies, size);
+    struct Node *root = buildHuffmanTree(letters, frequencies, size);
+
     // calculating height of Huffman Tree
     int maxTreeHeight = treeHeight(root);
-    int arr[maxTreeHeight];
-    int top = 0;
+
+    int arr[maxTreeHeight], top = 0;
 
     // traverse the huffman tree to display the code for each character
     traverseHuffmanTree(root, arr, top);
@@ -267,16 +236,17 @@ int main()
     int n;
     int totalFrequency = 100;
 
-    cout << "Enter the number of total characters: ";
+    cout << "Enter the number of the total characters: ";
     cin >> n;
 
     char letters[n];
     int frequencies[n];
+
     int sumOfFrequency = 0;
 
     for (int i = 0; i < n; i++)
     {
-        cout << "Enter letter number " << (i + 1) << " and its frequency (out of " << (totalFrequency - sumOfFrequency) << ")" << endl;
+        cout << "Enter letter number " << (i + 1) << " and its frequency (not greater than " << (totalFrequency - sumOfFrequency) << ")" << endl;
         cin >> letters[i] >> frequencies[i];
         sumOfFrequency += frequencies[i];
     }
@@ -288,12 +258,11 @@ int main()
         return 0;
     }
 
-    cout << "\nLetter | Huffman code ";
-    cout << "\n----------------------\n";
+    int size = sizeof(letters) / sizeof(letters[0]);
 
-    // create an object reference and call the method to display the letter codes
-    HuffmanCoding<char> huffman;
-    huffman.determineHuffmanCode(letters, frequencies, n);
+    cout << "Letter | Huffman code ";
+    cout << "\n----------------------\n";
+    displayHuffmanCodes(letters, frequencies, size);
 
     return 0;
 }

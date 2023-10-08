@@ -99,6 +99,7 @@ int main()
     printAdjacencyMatrix(graph, n);
 
     cout << "\nVertex with the largest closeness centrality: " << maxClosenessVertex << endl;
+    cout << "\n" << endl;
     
     return 0;
 }
